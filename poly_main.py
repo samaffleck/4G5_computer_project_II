@@ -22,8 +22,8 @@ import sys
 sys.path.insert(0, "ANI")
 import ani
 
-T = 300 # Temperature of the simulation in Kelvin
-poly_time_step = 0.5  # in units fs.
+T = 600 # Temperature of the simulation in Kelvin
+poly_time_step = 1  # in units fs.
 
 # we now create a polyisoprene molecule
 polyisoprene = pubchem_atoms_search(smiles="CC=C(C)CCC=C(C)CCC=C(C)CCC=C(C)CCC=C(C)CCC=C(C)C")
@@ -43,15 +43,15 @@ MaxwellBoltzmannDistribution(polyisoprene, temperature_K=T)
 # Set up dynamics object
 dynamics = Langevin(polyisoprene, temperature_K=T, timestep=poly_time_step*units.fs, friction=0.01) # units.fs means femto seconds so time step is 0.5x10^(-15)s
 
-poly_number_of_timesteps = 10000 # 100,000 for the final sim. This is the number of time steps: if time step is 0.5 ns then the total simulation time is 0.5 * this number.
+poly_number_of_timesteps = 100000 # 100,000 for the final sim. This is the number of time steps: if time step is 0.5 ns then the total simulation time is 0.5 * this number.
 number_of_stretches = 10 # In our final plot this will be the number of data points we have.
 sample_step = 5 # will be 100 in the final sim? Every this number of time steps we take a sample and report the positions, forces, etc.
 
 num_of_samples_per_stretch = poly_number_of_timesteps/sample_step
 
-equilibrium_steps = 500 # number of timesteps we run in between steps to ensure out molecule doesnt become unstable.
-big_delta_step = 2 # But this is to big to take in 1 go
-small_delta_step = 0.05 # This will be our small stretch
+equilibrium_steps = 200 # number of timesteps we run in between steps to ensure out molecule doesnt become unstable. 750
+big_delta_step = 3 # But this is to big to take in 1 go 2.5
+small_delta_step = 0.02 # This will be our small stretch 0.05
 num_of_delta_steps = int(big_delta_step/small_delta_step)
 
 maximim_force = 0.5 # This is the max force when we optimise the molecules position.
@@ -78,7 +78,7 @@ def stretch_atoms():
     print("Stretch performed")
 
 
-xyzfile = open('polyisoprene_trajectory_t=300_6.xyz', 'w') # the file we are going to record the structures to, the visualiser application "Ovito" can read such XYZ files.
+xyzfile = open('polyisoprene_trajectory_t=600_10.xyz', 'w') # the file we are going to record the structures to, the visualiser application "Ovito" can read such XYZ files.
 
 def report():
     t = dynamics.get_time()/units.fs
